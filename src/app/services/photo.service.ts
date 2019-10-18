@@ -12,7 +12,7 @@ export class PhotoService {
 
   takePicture() {
     const options: CameraOptions = {
-      quality: 93,
+      quality: 70,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,

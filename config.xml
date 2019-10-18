@@ -3,7 +3,7 @@
     <name>MachineLearning</name>
     <description>An Ionic/Cordova app to test machine learning services.</description>
     <author email="gabrielkotecki@gmail.com" href="http://ionicframework.com/">Gabriel Kotecki</author>
-    <content original-src="index.html" src="http://localhost:8101" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -89,5 +89,5 @@
     <plugin name="cordova-plugin-camera" spec="~4.0.3" />
     <engine name="android" spec="7.1.4" />
     <engine name="ios" spec="4.5.5" />
-    <allow-navigation href="http://localhost:8101" sessionid="bdf9de5d" />
+    <allow-navigation href="http://localhost:8100" sessionid="6f4024ba" />
 </widget>
