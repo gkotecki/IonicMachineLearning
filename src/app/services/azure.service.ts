@@ -13,7 +13,7 @@ export class AzureService {
   constructor(private http: HttpClient) {}
 
   // body = {"url":"https://picsum.photos/200/300"}
-  public getImageInfo(image: string): Observable<any> {
+  public getImageInfo(image: any): Observable<any> {
     console.log('getImageInfo entrado');
 
     const httpOptions = {
@@ -23,7 +23,7 @@ export class AzureService {
       }),
     };
     const body = { url: image };
-    return this.http.post(this.url, body, httpOptions);
+    return this.http.post(this.url, image, httpOptions);
   }
 
   public testFunc(): boolean {

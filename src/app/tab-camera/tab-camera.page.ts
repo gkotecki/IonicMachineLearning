@@ -24,7 +24,7 @@ export class TabCamera {
     console.log('entrando');
     this.loading.next(true);
     this.photoService.takePicture();
-    this.azure.getImageInfo('https://picsum.photos/200/300').subscribe((result) => {
+    this.azure.getImageInfo(this.photoService.photos[0].data).subscribe((result) => {
       console.log(result);
       this.dataResult.next(result.categories);
       this.loading.next(false);
