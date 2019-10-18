@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Photo Gallery
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div>
+  <img [src]="photoService.photos[0].data" />
+</div>
+
+<ion-content>
+  <h2 *ngIf="loading">
+    LOADING...
+  </h2>
+  <div *ngIf="!loading">
+    <h4>Acquired data</h4>
+  </div>
+
+  <!-- Button -->
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="photoService.takePicture()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- ! Button -->
+</ion-content>
