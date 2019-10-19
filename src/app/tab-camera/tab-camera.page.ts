@@ -19,11 +19,6 @@ export class TabCamera {
 
   /**
    * construtor do componente
-   * 
-   * @param photoService 
-   * @param azure 
-   * @param camera 
-   * @param storage 
    */
   constructor(
     public photoService: PhotoService,
@@ -62,7 +57,7 @@ export class TabCamera {
           .subscribe(
             (result) => {
               console.log(result);
-              this.dataResult.next(JSON.stringify(result));
+              this.dataResult.next(result);
             },
             (error) => {
               console.log(error);
@@ -79,7 +74,7 @@ export class TabCamera {
 
   /**
    * conversao de formato de dado de imagem
-   * @param dataURL 
+   * @param dataURL - base64 img input
    */
   private makeblob(dataURL): Blob {
     const BASE64_MARKER = ';base64,';

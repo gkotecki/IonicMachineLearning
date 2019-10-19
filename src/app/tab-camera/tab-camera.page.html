@@ -7,21 +7,34 @@
 </ion-header>
 
 <div>
-  <img [src]="currentImage | async" />
+  <img [src]="currentImage | async" alt="Please take a picture below to start" />
 </div>
 
 <ion-content>
+
   <!-- Data content -->
-  <div class="data-content">
+  <div class="data-content scroll">
     <h2 *ngIf="loading | async">
-      LOADING...
+      LOADING... <ion-spinner></ion-spinner>
     </h2>
     <div *ngIf="!(loading | async)">
       <h4>Acquired data:</h4>
       <div *ngIf="dataResult | async">
-        <p>
-          {{ dataResult | async }}
-        </p>
+
+        <!-- has description -->
+        <div *ngIf="(dataResult | async).description">
+          <p><b>Caption:</b> {{ (dataResult | async).description.captions[0].text }}</p>
+          <p><b>Tags:</b> {{ (dataResult | async).description.tags }}</p>
+          <p><b>Confidence:</b> {{ (dataResult | async).description.captions[0].confidence }}</p>
+        </div>
+        <!-- ! has description -->
+
+        <!-- no description -->
+        <div *ngIf="!(dataResult | async).description">
+          <p>{{ dataResult | async }}</p>
+        </div>
+		<!-- ! no description -->
+		
       </div>
     </div>
   </div>
@@ -34,4 +47,5 @@
     </ion-fab-button>
   </ion-fab>
   <!-- ! Button -->
+
 </ion-content>
