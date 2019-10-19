@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { PhotoService } from '../services/photo.service';
-import { AzureService } from '../services/azure.service';
 import { BehaviorSubject } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import { AzureService } from '../services/azure.service';
+import { PhotoService } from '../services/photo.service';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-tab-camera',
@@ -10,24 +12,94 @@ import { HttpResponse } from '@angular/common/http';
   styleUrls: ['tab-camera.page.scss'],
 })
 export class TabCamera {
-  public currentImage: any;
+  public photos: Photo[] = [];
+  public currentImage: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
   public loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public dataResult: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
 
-  constructor(public photoService: PhotoService, public azure: AzureService) {}
+  /**
+   * construtor do componente
+   * 
+   * @param photoService 
+   * @param azure 
+   * @param camera 
+   * @param storage 
+   */
+  constructor(
+    public photoService: PhotoService,
+    public azure: AzureService,
+    private camera: Camera,
+    private storage: Storage,
+  ) {}
 
+  /**
+   * incicialização
+   */
   ngOnInit() {
     this.photoService.loadSaved();
   }
 
-  public onClickCamera(): void {
+  /**
+   * função de clique no icone da câmera
+   */
+  public onClickCamera() {
     console.log('entrando');
     this.loading.next(true);
-    this.photoService.takePicture();
-    this.azure.getImageInfo(this.photoService.photos[0].data).subscribe((result) => {
-      console.log(result);
-      this.dataResult.next(result.categories);
-      this.loading.next(false);
-    });
+    const options: CameraOptions = {
+      quality: 35,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation: true,
+    };
+    this.camera.getPicture(options).then(
+      (imageData) => {
+        let base64Image = 'data:image/jpeg;base64,' + imageData;
+        this.currentImage.next(base64Image);
+        this.azure
+          .getImageInfo(this.makeblob(base64Image))
+          .pipe(finalize(() => this.loading.next(false)))
+          .subscribe(
+            (result) => {
+              console.log(result);
+              this.dataResult.next(JSON.stringify(result));
+            },
+            (error) => {
+              console.log(error);
+              this.dataResult.next(JSON.stringify(error));
+            },
+          );
+      },
+      (err) => {
+        console.log('Camera issue: ' + err);
+        this.dataResult.next('Camera issue: ' + JSON.stringify(err));
+      },
+    );
   }
+
+  /**
+   * conversao de formato de dado de imagem
+   * @param dataURL 
+   */
+  private makeblob(dataURL): Blob {
+    const BASE64_MARKER = ';base64,';
+    const parts = dataURL.split(BASE64_MARKER);
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: contentType });
+  }
+}
+
+/**
+ * Helper class
+ */
+class Photo {
+  data: any;
 }

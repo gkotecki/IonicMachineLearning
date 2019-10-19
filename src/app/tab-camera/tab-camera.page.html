@@ -1,28 +1,28 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Photo Gallery
+      Image Recognition
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <div>
-  <img [src]="photoService.photos[0].data" />
+  <img [src]="currentImage | async" />
 </div>
 
 <ion-content>
   <!-- Data content -->
   <div class="data-content">
-    <h2 *ngIf="(loading | async)">
+    <h2 *ngIf="loading | async">
       LOADING...
     </h2>
     <div *ngIf="!(loading | async)">
-	  <h4>Acquired data: </h4>
-	  <div *ngIf="(dataResult | async)" >
-		<p *ngFor="let item of (dataResult | async)" >
-			{{item.name}}
-		</p>
-	  </div>
+      <h4>Acquired data:</h4>
+      <div *ngIf="dataResult | async">
+        <p>
+          {{ dataResult | async }}
+        </p>
+      </div>
     </div>
   </div>
   <!-- ! Data content -->
