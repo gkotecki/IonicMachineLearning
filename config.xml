@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.machinelearning" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MachineLearning</name>
+    <name>IonicML</name>
     <description>An Ionic/Cordova app to test machine learning services.</description>
     <author email="gabrielkotecki@gmail.com" href="http://ionicframework.com/">Gabriel Kotecki</author>
     <content src="index.html" />
